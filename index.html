@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIVO X300 Tracker | 50 Days Challenge</title>
+    <style>
+        :root { --main-color: #00ffcc; --bg-dark: #0a0a0a; --card-bg: #161616; --done-color: #0077ff; }
+        body { background: var(--bg-dark); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { width: 100%; max-width: 450px; background: var(--card-bg); padding: 25px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid #222; text-align: center; }
+        h1 { font-size: 20px; text-transform: uppercase; letter-spacing: 4px; color: var(--main-color); margin-bottom: 15px; }
+        .balance-display { font-size: 54px; font-weight: 900; margin: 10px 0; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        .target-text { color: #666; font-size: 14px; margin-bottom: 5px; }
+        
+        /* Прогресс-бар */
+        .progress-container { background: #222; height: 14px; border-radius: 7px; margin: 20px 0; overflow: hidden; border: 1px solid #333; }
+        #progress-fill { background: linear-gradient(90deg, var(--done-color), var(--main-color)); height: 100%; width: 0%; transition: width 1s ease-out; }
+        
+        /* Календарь */
+        .calendar-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 25px 0; background: #111; padding: 15px; border-radius: 15px; border: 1px solid #222; }
+        .day-cell { aspect-ratio: 1/1; background: #222; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #444; cursor: pointer; transition: 0.2s; border: 1px solid #2a2a2a; }
+        .day-cell.checked { background: var(--done-color); color: white; border-color: #00a2ff; box-shadow: 0 0 10px rgba(0, 119, 255, 0.4); position: relative; }
+        .day-cell.checked::after { content: '✕'; font-size: 12px; }
+
+        /* Ввод данных */
+        .input-group { display: flex; gap: 8px; margin-top: 20px; }
+        input { flex: 1; background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; color: white; outline: none; }
+        button { background: var(--main-color); color: #000; border: none; border-radius: 12px; padding: 12px 18px; font-weight: bold; cursor: pointer; }
+        .motto { font-size: 11px; color: #444; margin-top: 20px; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>VIVO X300 CORE</h1>
+    <div class="target-text">ОСТАЛОСЬ: <span id="remains">0</span> ₽</div>
+    <div class="balance-display"><span id="current-balance">11112</span> ₽</div>
+    
+    <div class="progress-container">
+        <div id="progress-fill"></div>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; font-size: 13px; color: #888;">
+        <span>Прогресс: <span id="percent-text">0</span>%</span>
+        <span>Цель: 48 438 ₽</span>
+    </div>
+
+    <!-- Календарик на 50 дней -->
+    <div class="calendar-grid" id="calendar">
+        <!-- Ячейки создаст JavaScript -->
+    </div>
+
+    <div class="input-group">
+        <input type="number" id="add-amount" placeholder="+ ЗП или сдача">
+        <button onclick="updateBalance()">ОК</button>
+    </div>
+
+    <div class="motto">BELIEVER • DAY <span id="day-count">4</span>/50</div>
+</div>
+
+<script>
+    const targetPrice = 48438;
+    let currentBalance = 11112;
+    let daysPassed = 4; // Твои текущие 4 дня
+
+    // Создание календаря
+    const calendar = document.getElementById('calendar');
+    for (let i = 1; i <= 50; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'day-cell';
+        if (i <= daysPassed) cell.classList.add('checked');
+        cell.onclick = function() {
+            this.classList.toggle('checked');
+            updateDayCount();
+        };
+        calendar.appendChild(cell);
+    }
+
+    function updateDayCount() {
+        const checked = document.querySelectorAll('.day-cell.checked').length;
+        document.getElementById('day-count').innerText = checked;
+    }
+
+    function calculate() {
+        const percent = (currentBalance / targetPrice * 100).toFixed(1);
+        const remains = targetPrice - currentBalance;
+        
+        document.getElementById('current-balance').innerText = Math.floor(currentBalance);
+        document.getElementById('percent-text').innerText = percent;
+        document.getElementById('remains').innerText = remains > 0 ? Math.floor(remains) : 0;
+        document.getElementById('progress-fill').style.width = (percent > 100 ? 100 : percent) + "%";
+    }
+
+    function updateBalance() {
+        const input = document.getElementById('add-amount');
+        const amount = parseFloat(input.value);
+        if (!isNaN(amount) && amount > 0) {
+            currentBalance += amount;
+            calculate();
+            input.value = '';
+        }
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>
