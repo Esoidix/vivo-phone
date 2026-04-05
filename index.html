@@ -3,106 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIVO X300 Tracker | 50 Days Challenge</title>
+    <title>VIVO X300 ULTIMATE TRACKER</title>
     <style>
-        :root { --main-color: #00ffcc; --bg-dark: #0a0a0a; --card-bg: #161616; --done-color: #0077ff; }
-        body { background: var(--bg-dark); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { width: 100%; max-width: 450px; background: var(--card-bg); padding: 25px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid #222; text-align: center; }
-        h1 { font-size: 20px; text-transform: uppercase; letter-spacing: 4px; color: var(--main-color); margin-bottom: 15px; }
-        .balance-display { font-size: 54px; font-weight: 900; margin: 10px 0; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
-        .target-text { color: #666; font-size: 14px; margin-bottom: 5px; }
+        :root { --neon: #00ffcc; --bg: #050505; --card: #111; --accent: #0077ff; --danger: #ff3366; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 20px; }
+        .container { width: 100%; max-width: 450px; background: var(--card); padding: 25px; border-radius: 30px; border: 1px solid #222; box-shadow: 0 0 30px rgba(0, 255, 204, 0.05); text-align: center;}
+        h1 { font-size: 16px; letter-spacing: 5px; color: var(--neon); text-shadow: 0 0 10px var(--neon); margin-bottom: 20px; }
         
-        /* Прогресс-бар */
-        .progress-container { background: #222; height: 14px; border-radius: 7px; margin: 20px 0; overflow: hidden; border: 1px solid #333; }
-        #progress-fill { background: linear-gradient(90deg, var(--done-color), var(--main-color)); height: 100%; width: 0%; transition: width 1s ease-out; }
-        
-        /* Календарь */
-        .calendar-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 25px 0; background: #111; padding: 15px; border-radius: 15px; border: 1px solid #222; }
-        .day-cell { aspect-ratio: 1/1; background: #222; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #444; cursor: pointer; transition: 0.2s; border: 1px solid #2a2a2a; }
-        .day-cell.checked { background: var(--done-color); color: white; border-color: #00a2ff; box-shadow: 0 0 10px rgba(0, 119, 255, 0.4); position: relative; }
-        .day-cell.checked::after { content: '✕'; font-size: 12px; }
+        /* Панель показателей */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: #000; padding: 15px; border-radius: 20px; border: 1px solid #222; }
+        .stat-label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .stat-value { font-size: 24px; font-weight: 800; color: #fff; }
+        .stat-unit { font-size: 12px; color: var(--neon); }
 
-        /* Ввод данных */
-        .input-group { display: flex; gap: 8px; margin-top: 20px; }
-        input { flex: 1; background: #000; border: 1px solid #333; border-radius: 12px; padding: 12px; color: white; outline: none; }
-        button { background: var(--main-color); color: #000; border: none; border-radius: 12px; padding: 12px 18px; font-weight: bold; cursor: pointer; }
-        .motto { font-size: 11px; color: #444; margin-top: 20px; letter-spacing: 2px; }
+        .balance-main { font-size: 44px; font-weight: 900; margin: 10px 0; line-height: 1; }
+        .percent-box { font-size: 12px; color: #888; margin-bottom: 15px; }
+
+        /* Календарь */
+        .calendar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 15px 0; background: #000; padding: 12px; border-radius: 20px; border: 1px solid #222; }
+        .day-cell { aspect-ratio: 1/1; background: #161616; border-radius: 6px; display: flex; align-items: center; justify-content: center; position: relative; font-size: 9px; color: #333; cursor: pointer; }
+        .day-cell.checked::before { content: '✕'; position: absolute; font-size: 24px; color: var(--neon); font-weight: bold; text-shadow: 0 0 10px var(--neon); }
+
+        /* Список */
+        .shopping-list { background: #000; padding: 15px; border-radius: 20px; border: 1px solid #222; text-align: left; margin-bottom: 20px;}
+        .shop-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #aaa; cursor: pointer; }
+        .checkbox { width: 14px; height: 14px; border: 1px solid var(--neon); border-radius: 3px; margin-right: 10px; }
+        .shop-item.bought { opacity: 0.2; text-decoration: line-through; }
+
+        /* Поля ввода */
+        .input-area { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        input { background: #000; border: 1px solid #333; border-radius: 10px; padding: 10px; color: #fff; font-size: 12px; outline: none; }
+        button { background: var(--neon); border: none; border-radius: 10px; padding: 10px; font-weight: bold; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>VIVO X300 CORE</h1>
-    <div class="target-text">ОСТАЛОСЬ: <span id="remains">0</span> ₽</div>
-    <div class="balance-display"><span id="current-balance">11112</span> ₽</div>
+    <h1>VIVO MISSION CONTROL</h1>
     
-    <div class="progress-container">
-        <div id="progress-fill"></div>
-    </div>
-    
-    <div style="display: flex; justify-content: space-between; font-size: 13px; color: #888;">
-        <span>Прогресс: <span id="percent-text">0</span>%</span>
-        <span>Цель: 48 438 ₽</span>
-    </div>
-
-    <!-- Календарик на 50 дней -->
-    <div class="calendar-grid" id="calendar">
-        <!-- Ячейки создаст JavaScript -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Дистанция</div>
+            <div class="stat-value"><span id="total-km">21.1</span> <span class="stat-unit">КМ</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Осталось</div>
+            <div class="stat-value"><span id="remains">37007</span> <span class="stat-unit">₽</span></div>
+        </div>
     </div>
 
-    <div class="input-group">
-        <input type="number" id="add-amount" placeholder="+ ЗП или сдача">
-        <button onclick="updateBalance()">ОК</button>
+    <div class="balance-main"><span id="current-balance">11431</span> ₽</div>
+    <div class="percent-box">PROGRESS: <span id="percent-val">23.6</span>%</div>
+
+    <div class="calendar-grid" id="calendar"></div>
+
+    <div class="shopping-list">
+        <div class="shop-item" onclick="this.classList.toggle('bought')"><div><span class="checkbox"></span> Vivo X300</div> <span>47 837 ₽</span></div>
+        <div class="shop-item" onclick="this.classList.toggle('bought')"><div><span class="checkbox"></span> TWS 3 Ears</div> <span>5 184 ₽</span></div>
+        <div class="shop-item" onclick="this.classList.toggle('bought')"><div><span class="checkbox"></span> Case Matte</div> <span>593 ₽</span></div>
     </div>
 
-    <div class="motto">BELIEVER • DAY <span id="day-count">4</span>/50</div>
+    <div class="input-area">
+        <input type="number" id="add-cash" placeholder="+ Деньги">
+        <button onclick="addCash()">ДОБАВИТЬ ₽</button>
+        <input type="number" id="add-km" placeholder="+ Пробег">
+        <button onclick="addKm()" style="background: var(--accent); color: white;">ЗАПИСАТЬ КМ</button>
+    </div>
+
+    <div style="font-size: 9px; color: #222; margin-top: 15px; letter-spacing: 2px;">IMAGINE DRAGONS • RIDE OR DIE</div>
 </div>
 
 <script>
-    const targetPrice = 48438;
-    let currentBalance = 11112;
-    let daysPassed = 4; // Твои текущие 4 дня
+    const targetPrice = 47837; 
+    let currentBalance = 11431;
+    let totalKm = 21.1; // Твои 10.89 + 10.21
+    let daysPassed = 8; 
 
-    // Создание календаря
+    function getStartDate(daysToAdd) {
+        let start = new Date(2026, 2, 29); 
+        start.setDate(start.getDate() + daysToAdd);
+        return `${start.getDate().toString().padStart(2, '0')}.${(start.getMonth() + 1).toString().padStart(2, '0')}`;
+    }
+
     const calendar = document.getElementById('calendar');
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 0; i < 50; i++) {
         const cell = document.createElement('div');
         cell.className = 'day-cell';
-        if (i <= daysPassed) cell.classList.add('checked');
-        cell.onclick = function() {
-            this.classList.toggle('checked');
-            updateDayCount();
-        };
+        cell.innerHTML = getStartDate(i);
+        if (i < daysPassed) cell.classList.add('checked');
+        cell.onclick = function() { this.classList.toggle('checked'); };
         calendar.appendChild(cell);
     }
 
-    function updateDayCount() {
-        const checked = document.querySelectorAll('.day-cell.checked').length;
-        document.getElementById('day-count').innerText = checked;
+    function addCash() {
+        const val = parseFloat(document.getElementById('add-cash').value);
+        if (!isNaN(val)) { currentBalance += val; updateUI(); document.getElementById('add-cash').value = ''; }
     }
 
-    function calculate() {
-        const percent = (currentBalance / targetPrice * 100).toFixed(1);
-        const remains = targetPrice - currentBalance;
-        
+    function addKm() {
+        const val = parseFloat(document.getElementById('add-km').value);
+        if (!isNaN(val)) { totalKm += val; updateUI(); document.getElementById('add-km').value = ''; }
+    }
+
+    function updateUI() {
         document.getElementById('current-balance').innerText = Math.floor(currentBalance);
-        document.getElementById('percent-text').innerText = percent;
-        document.getElementById('remains').innerText = remains > 0 ? Math.floor(remains) : 0;
-        document.getElementById('progress-fill').style.width = (percent > 100 ? 100 : percent) + "%";
+        document.getElementById('total-km').innerText = totalKm.toFixed(1);
+        document.getElementById('remains').innerText = Math.floor(targetPrice - currentBalance);
+        document.getElementById('percent-val').innerText = (currentBalance / targetPrice * 100).toFixed(1);
     }
-
-    function updateBalance() {
-        const input = document.getElementById('add-amount');
-        const amount = parseFloat(input.value);
-        if (!isNaN(amount) && amount > 0) {
-            currentBalance += amount;
-            calculate();
-            input.value = '';
-        }
-    }
-
-    calculate();
+    updateUI();
 </script>
-
 </body>
 </html>
